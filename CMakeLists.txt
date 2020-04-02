@@ -68,7 +68,12 @@ option(SE_ENABLE_GCOV "Enable gcov coverage tests" OFF)
 option(ENABLE_DTSEARCH "Enable dtsearch full-text search integration" OFF)
 option(ENABLE_FTSEARCH "Enable internal full-text search" ON)
 option(ENABLE_TRIGGERS "Enable triggers support" ON)
-set(ENHANCE_TERM Libedit CACHE STRING "Enhance terminal with completion, history etc. Possible values: Readline -- use GNU Readline library, Libedit -- use libedit, None -- Don't do anything")
+if (APPLE)
+    message(STATUS "ENHANCE_TERM set to Readline, because of OSX detected")
+    set(ENHANCE_TERM Readline CACHE STRING "Enhance terminal with completion, history etc. Possible values: Readline -- use GNU Readline library, Libedit -- use libedit, None -- Don't do anything")
+else(APPLE)
+    set(ENHANCE_TERM Libedit CACHE STRING "Enhance terminal with completion, history etc. Possible values: Readline -- use GNU Readline library, Libedit -- use libedit, None -- Don't do anything")
+endif(APPLE)
 
 # this contains path to dtsearch includes to build Sedna with dtsearch support
 set(DTSEARCH_PREFIX "${CMAKE_SOURCE_DIR}/libs" CACHE PATH "Path to dtsearch sources to build Sedna with dtsearch support (dtsearch lib, commmon and includes are expected to be there)")

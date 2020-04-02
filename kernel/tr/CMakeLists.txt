@@ -1,14 +1,25 @@
 # check for FlexLexer.h
 if (NOT USING_PREGEN_LEXER)
     find_path(FLEXLEXER_PATH "FlexLexer.h")
+    # find_path cannot find lexer on OSX in default headers, so proceeding with CheckIncludeFileCXX
+    if(APPLE)
+       message(STATUS "Check if FlexLexer.h exists in system includes")
+       include(CheckIncludeFileCXX)
+       CHECK_INCLUDE_FILE_CXX("FlexLexer.h" SYSFLHFND)
+       message(STATUS "SYSFLHFND=${SYSFLHFND}")
+    endif()
 endif (NOT USING_PREGEN_LEXER)
 
 # if we haven't found FlexLexer.h or we are using our own lexer files, use our
 # own FlexLexer.h as well
-if (NOT FLEXLEXER_PATH)
-    message(STATUS "FlexLexer.h file is not found or isn't needed -- using the
-        one from ${CMAKE_SOURCE_DIR}/libs/compat/flex")
-    include_directories(${CMAKE_SOURCE_DIR}/libs/compat/flex)
+if (NOT FLEXLEXER_PATH )
+    if(SYSFLHFND)
+        message(STATUS "FlexLexer.h is found in system includes, do nothing")
+    else(SYSFLHFND)
+        message(STATUS "FlexLexer.h file is not found or isn't needed -- using the
+          one from ${CMAKE_SOURCE_DIR}/libs/compat/flex")
+        include_directories(${CMAKE_SOURCE_DIR}/libs/compat/flex)
+    endif(SYSFLHFND)
 else (NOT FLEXLEXER_PATH)
     message(STATUS "Found FlexLexer.h in -- ${FLEXLEXER_PATH}")
     include_directories(BEFORE ${FLEXLEXER_PATH})
