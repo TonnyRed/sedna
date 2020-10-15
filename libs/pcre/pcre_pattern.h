@@ -10,6 +10,7 @@ public:
 	PcreException(const std::string &msg) : std::runtime_error(msg) {}
 
 	static inline const char * errname(int rc) {
+	    static char errtxt[32] ;
 		switch (rc) {
 #define errcase(x) case x: return #x;
 		errcase(PCRE_ERROR_NOMATCH)		
@@ -28,7 +29,8 @@ public:
 		errcase(PCRE_ERROR_INTERNAL)
 		errcase(PCRE_ERROR_BADCOUNT)
 		default:
-			return "unknown error " + rc;
+		    sprintf(errtxt, "Unknown error: %d",rc);
+			return errtxt;
 
 #undef errcase
 		}

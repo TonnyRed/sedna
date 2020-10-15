@@ -48,7 +48,8 @@ MESSAGE(STATUS "Configuring custom expat - done")
 
 # libedit "external" library
 # we use internal cached variables to determine directories for -I and -L
-set(LIBEDIT_VER "20100424-3.0")
+#set(LIBEDIT_VER "20100424-3.0")
+set(LIBEDIT_VER "20191231-3.1")
 message(STATUS "Will build libedit from scratch when building the project, if needed...")
 
 set(LIBEDIT_TAR_DIR ${CMAKE_BINARY_DIR}/libs/libedit-${LIBEDIT_VER})
@@ -66,9 +67,7 @@ endif (UNIX)
 
 
 add_custom_command(OUTPUT ${libedit_files}
-                   COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_SOURCE_DIR}/libs/libedit-${LIBEDIT_VER}.tar.gz
-                   COMMAND ${PATCH_COMMAND} -p0 -d ${LIBEDIT_TAR_DIR} < ${CMAKE_CURRENT_SOURCE_DIR}/01-libedit-dups.patch
-                   COMMAND ${PATCH_COMMAND} -p0 -d ${LIBEDIT_TAR_DIR} < ${CMAKE_CURRENT_SOURCE_DIR}/02-libedit-bsd.patch
+                   COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_SOURCE_DIR}/libs/libedit-${LIBEDIT_VER}.tar
                    COMMAND ${CMAKE_COMMAND} -E chdir ${LIBEDIT_TAR_DIR} sh configure --enable-shared=no --prefix=${LIBEDIT_TAR_DIR}
                    COMMAND ${CMAKE_COMMAND} -E chdir ${LIBEDIT_TAR_DIR} make install
                    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
