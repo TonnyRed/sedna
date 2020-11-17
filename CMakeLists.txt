@@ -1,6 +1,7 @@
 # some project info
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.16)
 project(Sedna)
+
 
 if (COMMAND cmake_policy)
     cmake_policy(SET CMP0003 NEW)
@@ -54,6 +55,7 @@ else (UNIX)
     message(STATUS "System is of UNIX type -- no")
 endif (UNIX)
 
+include(Ccache)
 include(AddToConfig)
 
 # Determine features and options to be used
@@ -306,3 +308,15 @@ install(FILES AUTHORS COPYRIGHT HISTORY LICENSE README INSTALL DESTINATION .)
 # data and cfg dirtectories
 install(DIRECTORY DESTINATION data)
 install(DIRECTORY DESTINATION cfg)
+
+#generate dependancy graph
+configure_file(${CMAKE_SOURCE_DIR}/cmake/CMakeGraphVizOptions.cmake
+               ${CMAKE_BINARY_DIR}/CMakeGraphVizOptions.cmake
+               COPYONLY
+               )
+add_custom_target(graphviz ALL
+        COMMAND ${CMAKE_COMMAND} "--graphviz=depgraph.dot" .
+        COMMAND dot -Tpdf depgraph.dot -o depgraph.pdf
+        COMMAND rm depgraph.dot*
+        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+        )
