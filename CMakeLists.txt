@@ -320,3 +320,7 @@ add_custom_target(graphviz ALL
         COMMAND rm depgraph.dot*
         WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
         )
+# Testing
+enable_testing()
+add_subdirectory(tests)
+
