@@ -2,29 +2,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(Sedna)
 
-
-if (COMMAND cmake_policy)
-    cmake_policy(SET CMP0003 NEW)
-    cmake_policy(SET CMP0005 NEW)
-endif (COMMAND cmake_policy)
-
-# define CMAKE_VERSION if it isn't defined
-if (NOT CMAKE_VERSION)
-    set(CMAKE_VERSION "${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}")
-    message(STATUS "CMAKE_VERSION was not defined, setting to ${CMAKE_VERSION}")
-endif (NOT CMAKE_VERSION)
-message(STATUS "CMake version is -- ${CMAKE_VERSION}")
-
-# Update policies to get rid of warnings (building on 3.16.5)
-if (CMAKE_VERSION VERSION_GREATER 2.8.12 OR CMAKE_VERSION VERSION_EQUAL 2.8.12)
-    cmake_policy(SET CMP0042 NEW)
-endif (CMAKE_VERSION VERSION_GREATER 2.8.12 OR CMAKE_VERSION VERSION_EQUAL 2.8.12)
-
-if (CMAKE_VERSION VERSION_GREATER 3.9 OR CMAKE_VERSION VERSION_EQUAL 3.9 )
-    cmake_policy(SET CMP0068 NEW)
-endif (CMAKE_VERSION VERSION_GREATER 3.9 OR CMAKE_VERSION VERSION_EQUAL 3.9 )
-# Update policies to get rid of warnings (building on 3.16.5)
-
 # platform info
 message(STATUS "Building for: ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
 
