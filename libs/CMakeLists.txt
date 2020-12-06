@@ -1,50 +1,10 @@
 # pcre library
 add_subdirectory(pcre)
 
-# expat "external" library
-# we use internal cached variables to determine directories for -I and -L: 1) look for cache 2) then try to describe builduing expat from scratch
-set(EXPAT_VER "2.0.1")
+# expat library
+add_subdirectory(expat)
 
-message(STATUS "Configuring custom expat, version: ${EXPAT_VER}, platform: ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
 
-# directory to untar expat
-set(EXPAT_TAR_DIR ${CMAKE_BINARY_DIR}/libs/expat-${EXPAT_VER})
-
-# expat files we depend on
-set(expat_files_lib ${EXPAT_TAR_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}expat${CMAKE_STATIC_LIBRARY_SUFFIX})
-set(expat_files_src ${EXPAT_TAR_DIR}/lib/expat.h ${EXPAT_TAR_DIR}/lib/expat_external.h
-                    ${EXPAT_TAR_DIR}/lib/xmlparse.c ${EXPAT_TAR_DIR}/lib/xmltok.c ${EXPAT_TAR_DIR}/lib/xmlrole.c)
-
-# command to obtain source files
-add_custom_command(OUTPUT ${expat_files_src}
-                   COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_SOURCE_DIR}/libs/expat-${EXPAT_VER}.tar.gz
-                   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-                   VERBATIM
-                   )
-
-# full library path (exported to parent via INTERNAL)
-set(CUSTOM_EXPAT_DIR ${EXPAT_TAR_DIR}/lib CACHE INTERNAL "Internal expat full path")
-
-if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    add_library(expat STATIC ${expat_files_src})
-    set_property(TARGET expat PROPERTY COMPILE_DEFINITIONS _MBCS _LIB COMPILED_FROM_DSP XML_LARGE_SIZE)
-    add_custom_target(custom_expat DEPENDS expat)
-else (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    # on unix/linux we just use configure+make
-    add_custom_command(OUTPUT ${expat_files_lib}
-                       COMMAND /bin/sh configure --enable-shared=no --prefix=${EXPAT_TAR_DIR} CPPFLAGS=-DXML_LARGE_SIZE
-                       COMMAND make install
-                       DEPENDS ${expat_files_src}
-                       WORKING_DIRECTORY ${EXPAT_TAR_DIR}
-                       VERBATIM
-                      )
-
-    # this and the above command to avoid rebuilding expat
-    add_custom_target(custom_expat DEPENDS ${expat_files_lib})
-endif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-
-MESSAGE(STATUS "Custom expat in -- ${EXPAT_TAR_DIR}/lib")
-MESSAGE(STATUS "Configuring custom expat - done")
 
 # libedit "external" library
 # we use internal cached variables to determine directories for -I and -L

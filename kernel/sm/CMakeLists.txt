@@ -45,7 +45,7 @@ FinalizeBinaries(${sm_execs})
 # set common dependencies
 foreach(sm_exec ${sm_execs})
     add_dependencies(${sm_exec} generate_error_codes) # generate error files before any sm exec
-    add_dependencies(${sm_exec} custom_expat) # find/build expat before any sm exec
+    add_dependencies(${sm_exec} sedna::expat) # find/build expat before any sm exec
 endforeach(sm_exec)
     
 # msvc-specific option

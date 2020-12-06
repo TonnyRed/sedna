@@ -10,5 +10,5 @@ ADD_SUBFOLDER_SRC(common_SRC u)
 SET_SOURCES(common_SRC 1)
 
 add_library(common STATIC ${common_SRC})
-add_dependencies(common custom_expat) # find/build expat before common
+add_dependencies(common sedna::expat) # find/build expat before common
 add_dependencies(common generate_error_codes) # build error codes before common (devenv parallel build freaks out without this)

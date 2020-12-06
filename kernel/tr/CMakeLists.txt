@@ -86,7 +86,7 @@ add_executable(se_trn ${trn_SRC})
 target_link_libraries(se_trn ${common_libs})
 
 add_dependencies(se_trn generate_error_codes) # generate error files before se_trn
-add_dependencies(se_trn custom_expat)         # find/build expat before se_trn
+add_dependencies(se_trn sedna::expat)         # find/build expat before se_trn
 
 # msvc-specific options: 
 #    1) it seems that 10mb stack is not enough for debug modes, make it 25mb
