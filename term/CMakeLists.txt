@@ -61,7 +61,12 @@ else (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 endif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 
 add_executable(se_term ${term_SRC})
-target_link_libraries(se_term ${TERM_LIB} common ${TERM_SEDNA_LIB} expat ${sysaux_LIB})
+target_link_libraries(se_term
+        PRIVATE
+        ${TERM_LIB}
+        common_libs
+        ${TERM_SEDNA_LIB}
+        )
 ConfigOutputDir(se_term)
 
 if (TERM_LIB AND ${ENHANCE_TERM} STREQUAL "Libedit")

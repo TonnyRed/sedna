@@ -1,7 +1,8 @@
 # full common library for sedna
 
 add_library(common STATIC)
-add_dependencies(common sedna::expat) # find/build expat before common
+#add_dependencies(common sedna::expat) # find/build expat before common
+target_link_libraries(common PRIVATE sedna::expat)
 add_dependencies(common generate_error_codes) # build error codes before common (devenv parallel build freaks out without this)
 
 target_sources( common

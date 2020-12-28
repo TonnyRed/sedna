@@ -67,28 +67,21 @@ foreach (SUB ${lib_SUBDIRS})
 endforeach (SUB ${lib_SUBDIRS})
 SET_SOURCES(trn_SRC 1)
 
-# libraries to link
-set(common_libs common expat pcre ${sysaux_LIB})
-
-# dtsearch libs
-if (ENABLE_DTSEARCH)
-    list(APPEND common_libs ${DTSEARCH_LIB})
-    list(APPEND trn_SRC ${dt_sources} ${dt_headers})
-
-    # add zlib on Unix
-    if (UNIX)
-        list(APPEND common_libs ${Z_LIB})
-    endif (UNIX)
-endif (ENABLE_DTSEARCH)
+#set(common_libs common expat pcre ${sysaux_LIB})
 
 # se_trn
 add_executable(se_trn ${trn_SRC})
-target_link_libraries(se_trn ${common_libs})
+target_link_libraries(se_trn
+         PRIVATE
+            common_libs
+            pcre
+         #dtsearch libs
+            $<$<BOOL:${ENABLE_DTSEARCH}>:DTSEARCH_LIB>
+         #zlib on Unix
+            $<$<BOOL:${ENABLE_DTSEARCH}>:$<$<BOOL:${UNIX}>:Z_LIB>>
+        )
 
-add_dependencies(se_trn generate_error_codes) # generate error files before se_trn
-add_dependencies(se_trn sedna::expat)         # find/build expat before se_trn
-
-# msvc-specific options: 
+# msvc-specific options:
 #    1) it seems that 10mb stack is not enough for debug modes, make it 25mb
 #       note that there are software checks on executor, but in debug modes
 #       frame-size is larger than expected (especially on x64)
