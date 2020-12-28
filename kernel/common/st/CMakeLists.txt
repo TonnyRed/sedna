@@ -5,3 +5,6 @@ if ("${CMAKE_SYSTEM_NAME}" MATCHES "Windows")
 else ("${CMAKE_SYSTEM_NAME}" MATCHES "Windows")
     list(APPEND st_SRC os_other/stacktrace.c)
 endif ("${CMAKE_SYSTEM_NAME}" MATCHES "Windows")
+
+target_sources(common PRIVATE ${st_SRC})
+source_group(st FILES stacktrace.h)
